@@ -1,0 +1,6 @@
+configurable:
+  keywordToUrl:
+    displayName: "Quick Open URL"
+    description: "Put the url you want to quick open here associate with a keyword that triggers it. Use {} as placeholders"
+    value:
+      translate: "https://translate.google.com/#view=home&op=translate&sl=auto&tl=en&text={}"
