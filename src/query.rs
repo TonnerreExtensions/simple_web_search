@@ -19,19 +19,19 @@ pub fn query(req: &str, config: Config, identifier: &str) -> Option<String> {
     let matched_urls = find_matched_urls(&config, &keyword);
     let filled_urls = matched_urls
         .into_iter()
-        .filter_map(|url| fill_matched_url(url, content_split.clone()))
+        .filter_map(|(keyword, url)| Some((keyword, fill_matched_url(url, content_split.clone())?)))
         .collect::<Vec<_>>();
     let services = filled_urls
         .iter()
-        .map(|url| {
+        .map(|(keyword, url)| {
             json!({
                 "id": url,
                 "subtitle": url,
-                "title": if content.is_empty() {
+                "title": format!("{} {}", keyword, if content.is_empty() {
                     "..."
                 } else {
                     content
-                }
+                })
             })
         })
         .collect::<Vec<_>>();
@@ -49,12 +49,11 @@ fn separate_keyword_content(req: &str) -> (String, &str) {
     (keyword.to_lowercase(), content)
 }
 
-fn find_matched_urls<'a>(config: &'a Config, keyword: &str) -> Vec<&'a String> {
+fn find_matched_urls<'a>(config: &'a Config, keyword: &str) -> Vec<(&'a String, &'a String)> {
     config
         .values()
         .iter()
         .filter(|(key, _)| key.starts_with(keyword))
-        .map(|(_, content)| content)
         .collect()
 }
 

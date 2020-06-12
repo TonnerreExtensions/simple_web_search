@@ -10,7 +10,7 @@ fn main() {
         return help();
     }
     args.next();
-    let req_type = args.next().unwrap().to_lowercase();
+    let req_type = args.next().unwrap();
     let req_content = args.next().unwrap();
     if req_content.trim().is_empty() {
         return;
